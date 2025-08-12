@@ -1,4 +1,4 @@
-// --- "Database" progetti ---
+// --- "Database" progetti (aggiornato ai nuovi nomi file) ---
 const projectData = {
   "1": {
     title: "Velario | Centro Multifunzionale",
@@ -30,12 +30,12 @@ const projectData = {
   }
 };
 
-// Utility
-const qs = (sel, root=document) => root.querySelector(sel);
-const shuffle = arr => arr.sort(() => Math.random() - 0.5);
-const getParam = name => new URLSearchParams(location.search).get(name);
+// --- Utility ---
+function qs(sel, root = document) { return root.querySelector(sel); }
+function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+function getParam(name) { return new URLSearchParams(location.search).get(name); }
 
-// Home
+// --- Render Homepage ---
 function renderHome() {
   const grid = qs("#portfolioGrid");
   if (!grid) return;
@@ -49,7 +49,7 @@ function renderHome() {
     a.href = `progetto.html?id=${encodeURIComponent(id)}`;
 
     const heights = [200, 240, 280, 320, 360];
-    a.style.setProperty("--h", heights[Math.floor(Math.random()*heights.length)] + "px");
+    a.style.setProperty("--h", heights[Math.floor(Math.random() * heights.length)] + "px");
 
     const img = document.createElement("img");
     img.src = p.cover;
@@ -57,7 +57,7 @@ function renderHome() {
 
     const badge = document.createElement("div");
     badge.className = "badge";
-    badge.textContent = (p.meta && p.meta.luogo) ? p.meta.luogo : "Progetto";
+    badge.textContent = p.meta?.luogo || "Progetto";
 
     a.appendChild(img);
     a.appendChild(badge);
@@ -65,7 +65,7 @@ function renderHome() {
   });
 }
 
-// Pagina progetto
+// --- Render Pagina Progetto ---
 function renderProject() {
   const container = qs("#projectContainer");
   if (!container) return;
@@ -83,10 +83,7 @@ function renderProject() {
 
   const meta = document.createElement("div");
   meta.className = "project-meta";
-  meta.textContent = [
-    data.meta && data.meta.luogo ? `Luogo: ${data.meta.luogo}` : null,
-    data.meta && data.meta.anno ? `Anno: ${data.meta.anno}` : null
-  ].filter(Boolean).join(" · ");
+  meta.textContent = [data.meta?.luogo ? `Luogo: ${data.meta.luogo}` : null, data.meta?.anno ? `Anno: ${data.meta.anno}` : null].filter(Boolean).join(" · ");
 
   const text = document.createElement("div");
   text.className = "project-text";
@@ -104,6 +101,7 @@ function renderProject() {
   container.replaceChildren(meta, text, gallery);
 }
 
+// --- Avvio ---
 document.addEventListener("DOMContentLoaded", () => {
   renderHome();
   renderProject();
